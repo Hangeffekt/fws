@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProjectController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get("/", [ProjectController::class, "projects"]);
+Route::post("createproject", [ProjectController::class, "createProject"])->name("createProject");
+
+Route::get("/project/{id}", [ProjectController::class, "project"]);
+Route::post("updateproject", [ProjectController::class, "updateProject"])->name("updateProject");

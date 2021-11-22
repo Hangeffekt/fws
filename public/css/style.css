@@ -1,0 +1,11 @@
+#modifyuser {
+  display: none;
+}
+
+.emptyname, .emptyemail, #clearform {
+  display: none;
+}
+
+.userbox {
+  background-color: rgb(235, 235, 235);
+}
