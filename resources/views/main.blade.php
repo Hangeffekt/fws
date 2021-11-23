@@ -34,9 +34,9 @@
                         <span class="text-danger emptyemail">A mező kitöltése kötelező</span>
                         <span class="text-danger">@error('contact'){{ $message }} @enderror</span>
                     </div>
-                    <input type="hidden" name="modifyid" value="">
+                    <input type="hidden" name="modifyid" value="" id="modifyid">
                     <p id="adduser" class="btn btn-success">Kapcsolattartó mentése</p>
-                    <p id="modifyuser" class="btn btn-warning">Kapcsolattartó módosítása</p>
+                    <p id="updateuser" class="btn btn-warning">Kapcsolattartó módosítása</p>
                     <p id="clearform" class="btn btn-warning">Űrlap törlése</p>
                 </div>
                 <div class="col-12 alert alert-primary" role="alert" id="contactsalert">
@@ -53,8 +53,9 @@
 
     <div class="col-3">Név</div>
     <div class="col-3">Állapot</div>
-    <div class="col-3"></div>
-    <div class="col-3"></div>
+    <div class="col-2">Kapcsolattartók száma</div>
+    <div class="col-2"></div>
+    <div class="col-2"></div>
 
     @if($Projects == null)
         <div class="col-12 alert alert-primary" role="alert">
@@ -66,11 +67,12 @@
             <div class="row">
                 <div class="col-3">{{ $project->name }}</div>
                 <div class="col-3">{{ $project->status }}</div>
-                <div class="col-3"><a href="/project/{{ $project->id }}" class="btn btn-warning">Módosítás</a></div>
-                <div class="col-3"><a href="" class="btn btn-danger">Törlés</a></div>
+                <div class="col-2">{{ count(json_decode($project->contacts)) }}</div>
+                <div class="col-2"><a href="/project/{{ $project->id }}" class="btn btn-warning">Módosítás</a></div>
+                <div class="col-2"><a href="" class="btn btn-danger">Törlés</a></div>
             </div>
         </div>
         @endforeach
-        {{ $Projects->onEachSide(5)->links() }}
+        {{ $Projects->onEachSide(5)->links("pagination::bootstrap-4") }}
     @endif
 @endsection

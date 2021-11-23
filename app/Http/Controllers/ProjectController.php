@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
+namespace App\Mail\ChangeMail;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 
 class ProjectController extends Controller
@@ -28,6 +30,14 @@ class ProjectController extends Controller
         $contacts = json_encode($request->contact);
 
         //if validate successfuly
+
+        //send mail
+
+        $data["option"] = "new";
+        $data["title"] = $request->title;
+        $data["description"] = $request->description;
+
+
 
         $affected = DB::table('projects')->insert([
             'name' => $request->title,
@@ -63,6 +73,34 @@ class ProjectController extends Controller
         $contacts = json_encode($request->contact);
 
         //if validate successfuly
+
+        //get project data
+
+        $project = DB::table('projects')->where("id", $request->id)->first();
+
+        $data["option"] = "changes";
+
+        if($project->name != $request->title){
+            $data["title"] = $request->title;
+        }
+        else {
+            $data["title"] = null;
+        }
+
+        if($project->description != $request->description){
+            $data["description"] = $request->description;
+        }
+        else {
+            $data["description"] = null;
+        }
+
+        //send mail
+
+        foreach($request->contact as $contact){
+            $email = explode("/", $contact);
+            Mail::to($email[1])->send();
+        }
+
 
         $affected = DB::table('projects')
             ->where('id', $request->id)

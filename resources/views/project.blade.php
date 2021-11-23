@@ -39,17 +39,15 @@
                 <input type="text" name="name" id="username" class="form-control">
                 <span class="text-danger emptyname">A mező kitöltése kötelező</span>
             </div>
-
             <div class="form-group">
                 <label for="email">E-mail</label>
                 <input type="email" name="email" id="useremail" class="form-control">
                 <span class="text-danger emptyemail">A mező kitöltése kötelező</span>
                 <span class="text-danger">@error('contact'){{ $message }} @enderror</span>
             </div>
-
-            <input type="hidden" name="modifyid" value="">
+            <input type="hidden" name="modifyid" value="" id="modifyid">
             <p id="adduser" class="btn btn-success">Kapcsolattartó mentése</p>
-            <p id="modifyuser" class="btn btn-warning">Kapcsolattartó módosítása</p>
+            <p id="updateuser" class="btn btn-warning">Kapcsolattartó módosítása</p>
             <p id="clearform" class="btn btn-warning">Űrlap törlése</p>
         </div>
 
