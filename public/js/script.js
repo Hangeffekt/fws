@@ -20,9 +20,9 @@ $(document).ready(function(){
 			let name = $("#username").val();
 			let email = $("#useremail").val();
 			let contacts = $("#contacts").html();
-			let checkbox = "<div id='userrow" + divcounter + "'><span class='username'>" + name + "</span><span class='useremail'>" + email +
-			"</span>/<span class='modify btn btn-warning' id='modifyuser" + divcounter + "'>Szerkesztés"  + 
-			"</span>/<span class='deleteuser btn btn-danger' id='deleteuser" + divcounter + "'>Törlés</span>" +
+			let checkbox = "<div id='userrow" + divcounter + "'><div class='username'>" + name + "</div><div class='useremail'>" + email +
+			"</div><div class='contact-buttons border-bottom border-dark'><span class='modify btn btn-warning' id='modifyuser" + divcounter + "'>Szerkesztés"  + 
+			"</span> <span class='deleteuser btn btn-danger' id='deleteuser" + divcounter + "'>Törlés</span></div>" +
 			"<input type='hidden' name='contact[]' value='" + name + "/" + email + "'></div>";
 
 			
@@ -123,6 +123,33 @@ $(document).ready(function(){
 			$(".emptyemail").css("display", "none");
 		})
 	}
+
+
+		$(".deletproject").submit(function(e){
+			e.preventDefault();
+
+			$(this).css("background", "red");
+
+			projectid = $(this).find("#projectid").val();
+			console.log($(this).find("#projectid").val());
+			pojectidpath = "#" + projectid;
+			
+			$.ajax({
+				url: "/deleteproject",
+				type: "POST",
+				dataType: "json",
+				data: {
+					id: projectid,
+					_token: $("input[name=_token]").val()
+				},
+				success:function(response){
+					if(response == "ok"){
+						$(pojectidpath).html("");
+					}
+				}
+			})
+		})
+	
 	
 });
 

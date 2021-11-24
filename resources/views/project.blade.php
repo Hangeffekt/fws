@@ -57,10 +57,12 @@
                 <?php $counter++;
                 $contact_item = explode("/", $contact); ?>
                 <div id='userrow{{ $counter }}'>
-                    <span class='username'>{{ $contact_item[0] }}</span>
-                    <span class='useremail'>{{ $contact_item[1] }}</span>
-                    <span class='modify btn btn-warning' id='modifyuser{{ $counter }}'>Szerkesztés</span>
-                    <span class='deleteuser btn btn-danger' id='deleteuser{{ $counter }}'>Törlés</span>
+                    <div class='username'>{{ $contact_item[0] }}</div>
+                    <div class='useremail'>{{ $contact_item[1] }}</div>
+                    <div class="contact-buttons border-bottom border-dark">
+                        <span class='modify btn btn-warning' id='modifyuser{{ $counter }}'>Szerkesztés</span>
+                        <span class='deleteuser btn btn-danger' id='deleteuser{{ $counter }}'>Törlés</span>
+                    </div>
                     <input type='hidden' name='contact[]' value='{{ $contact_item[0] }}/{{ $contact_item[1] }}'></div>
             @endforeach
         </div>

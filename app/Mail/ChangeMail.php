@@ -30,6 +30,6 @@ class ChangeMail extends Mailable
      */
     public function build()
     {
-        return $this->subject("valami szöveg")->view("emails.changeMail");
+        return $this->subject("Projekt")->view("emails.changeMail");
     }
 }

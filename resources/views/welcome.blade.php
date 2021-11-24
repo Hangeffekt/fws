@@ -17,9 +17,9 @@
     <div class="container">
         <div class="row">
             @if(Session::get('success'))
-                <div class="alert alert-success">{{ Session::get('success') }}</div>
+                <div class="col-12 alert alert-success">{{ Session::get('success') }}</div>
             @elseif(Session::get('fail'))
-                <div class="alert alert-danger">{{ Session::get('fail') }}</div>
+                <div class="col-12 alert alert-danger">{{ Session::get('fail') }}</div>
             @endif
             @yield('content')
         </div>

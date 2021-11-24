@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-namespace App\Mail\ChangeMail;
 
+use App\Mail\ChangeMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -36,8 +36,12 @@ class ProjectController extends Controller
         $data["option"] = "new";
         $data["title"] = $request->title;
         $data["description"] = $request->description;
+        $data["status"] = "Fejlesztésre vár";
 
-
+        foreach($request->contact as $contact){
+            $email = explode("/", $contact);
+            Mail::to($email[1])->send(new ChangeMail($data));
+        }
 
         $affected = DB::table('projects')->insert([
             'name' => $request->title,
@@ -79,6 +83,7 @@ class ProjectController extends Controller
         $project = DB::table('projects')->where("id", $request->id)->first();
 
         $data["option"] = "changes";
+        $data["old_title"] = $project->name;
 
         if($project->name != $request->title){
             $data["title"] = $request->title;
@@ -94,13 +99,21 @@ class ProjectController extends Controller
             $data["description"] = null;
         }
 
-        //send mail
-
-        foreach($request->contact as $contact){
-            $email = explode("/", $contact);
-            Mail::to($email[1])->send();
+        if($project->status != $request->status){
+            $data["status"] = $request->status;
+        }
+        else {
+            $data["status"] = null;
         }
 
+        //send mail
+
+        if($data["title"] != null || $data["description"] != null){
+            foreach($request->contact as $contact){
+                $email = explode("/", $contact);
+                Mail::to($email[1])->send(new ChangeMail($data));
+            }
+        }
 
         $affected = DB::table('projects')
             ->where('id', $request->id)
@@ -112,5 +125,14 @@ class ProjectController extends Controller
         ]);
 
         return back()->with("success", "Mentettük a változásokat!");
+    }
+
+    public function deleteProject(Request $request) {
+
+        $affected = DB::table('projects')
+            ->where('id', $request->id)
+            ->delete();
+
+        return response()->json("ok");
     }
 }

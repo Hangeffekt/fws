@@ -19,3 +19,4 @@ Route::post("createproject", [ProjectController::class, "createProject"])->name(
 
 Route::get("/project/{id}", [ProjectController::class, "project"]);
 Route::post("updateproject", [ProjectController::class, "updateProject"])->name("updateProject");
+Route::post("deleteproject", [ProjectController::class, "deleteProject"])->name("deleteProject");

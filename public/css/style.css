@@ -1,3 +1,7 @@
+body {
+  padding-top: 1em;
+}
+
 #updateuser {
   display: none;
 }
@@ -8,4 +12,13 @@
 
 .userbox {
   background-color: rgb(235, 235, 235);
+}
+
+.username {
+  font-weight: bold;
+}
+
+.contact-buttons {
+  margin-bottom: 0.5em;
+  padding-bottom: 0.5em;
 }
