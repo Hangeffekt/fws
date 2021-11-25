@@ -9,11 +9,13 @@
 <body>
     @if($data["option"] == "new")
         <h3>Új projekthez adták hozzá</h3>
+    @elseif($data["option"] == "delete")
+        <h3>Önt a {{ $data["title"] }} című projektből törölték!</h3>
     @else
         <h3>{{ $data["old_title"] }} változásai</h3>
     @endif
 
-    @if($data["title"] != null)
+    @if($data["title"] != null || $data["option"] != "delete")
         <div class="col-12">
             Cím: {{ $data["title"] }}
         </div>

@@ -11,9 +11,39 @@ use App\Models\User;
 class ProjectController extends Controller
 {
 
-    public function projects(){
+    public function projects(Request $request){
 
-        $projects = DB::table('projects')->paginate(10);
+        //filter
+
+        if($request->filter == null){
+            $request->session()->put("filter", null);
+        }
+        else if($request->filter == 1){
+            $filter = "Fejlesztésre vár";
+            $request->session()->put("filter", $filter);
+        }
+        else if($request->filter == 2){
+            $filter = "Folyamatban";
+            $request->session()->put("filter", $filter);
+        }
+        else if($request->filter == 3){
+            $filter = "Kész";
+            $request->session()->put("filter", $filter);
+        }
+        else{
+            return back()->with("fail", "Ilyen projekt állapot nem létezik!");
+        }
+            
+
+        if(session("filter") != null){
+            $projects = DB::table('projects')
+            ->where("status", $filter)
+            ->paginate(10);
+        }
+        else{
+            $projects = DB::table('projects')
+            ->paginate(10);
+        }
 
         return view('main', ["Title"=>"Projektek", "Projects"=>$projects]);
     }
@@ -113,6 +143,37 @@ class ProjectController extends Controller
                 $email = explode("/", $contact);
                 Mail::to($email[1])->send(new ChangeMail($data));
             }
+        }
+
+        //if delete from project
+
+        $database_contacts = json_decode($project->contacts);
+
+        foreach($database_contacts as $database_contact){
+
+            $delete = true;
+
+            foreach($request->contact as $contact){
+                if($contact == $database_contact){
+                    $delete = false;
+                }
+                else if($delete == false){
+                    $delete = false;
+                }
+                else{
+                    $delete = true;
+                }
+            }
+
+            if($delete == true){
+                $data["option"] = "delete";
+                $data["title"] = $project->name;
+                $data["description"] = null;
+                $data["status"] = null;
+                $email = explode("/", $database_contact);
+                Mail::to($email[1])->send(new ChangeMail($data));
+            }
+
         }
 
         $affected = DB::table('projects')

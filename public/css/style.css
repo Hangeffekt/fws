@@ -22,3 +22,13 @@ body {
   margin-bottom: 0.5em;
   padding-bottom: 0.5em;
 }
+
+.thead-dark {
+  background-color: #343a40;
+  color: white;
+  font-weight: bold;
+}
+
+.project-list:hover {
+  background-color: rgb(243, 243, 243);
+}

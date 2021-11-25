@@ -14,7 +14,7 @@ use App\Http\Controllers\ProjectController;
 |
 */
 
-Route::get("/", [ProjectController::class, "projects"]);
+Route::get("/{filter?}", [ProjectController::class, "projects"]);
 Route::post("createproject", [ProjectController::class, "createProject"])->name("createProject");
 
 Route::get("/project/{id}", [ProjectController::class, "project"]);

@@ -14,9 +14,8 @@ $(document).ready(function(){
 
 			$("#contacts div").each(function(){
 				divcounter += 1;
-				console.log(divcounter);
 			})
-			console.log(divcounter);
+			
 			let name = $("#username").val();
 			let email = $("#useremail").val();
 			let contacts = $("#contacts").html();
@@ -58,7 +57,7 @@ $(document).ready(function(){
 
 	function modify(){
 		$(".modify").click(function(){
-			console.log("ok");
+			
 			$(".modify").each(function(){
 				$(this).click(function(){
 					let id = $(this).attr('id');
@@ -81,6 +80,8 @@ $(document).ready(function(){
 		$("#updateuser").click(function(){
 			let pathname = "#userrow" + $("#modifyid").val() + " .username";
 			let pathemail = "#userrow" + $("#modifyid").val() + " .useremail";
+			let pathhidden = "#userrow" + $("#modifyid").val() + " input:hidden";
+			let data = $("#username").val() + "/" + $("#useremail").val();
 			
 			$(pathname).text($("#username").val());
 			$(pathemail).text($("#useremail").val());
@@ -88,6 +89,7 @@ $(document).ready(function(){
 			$("#username").val("");
 			$("#useremail").val("");
 			$("input:hidden").attr("id", "");
+			$(pathhidden).val(data);
 			$("#adduser").css("display", "block");
 			$("#updateuser").css("display", "none");
 			$("#clearform").css("display", "none");
@@ -124,31 +126,46 @@ $(document).ready(function(){
 		})
 	}
 
+	/** delete project */
 
-		$(".deletproject").submit(function(e){
-			e.preventDefault();
+	$(".deletproject").submit(function(e){
+		e.preventDefault();
 
-			$(this).css("background", "red");
+		$(this).css("background", "red");
 
-			projectid = $(this).find("#projectid").val();
-			console.log($(this).find("#projectid").val());
-			pojectidpath = "#" + projectid;
-			
-			$.ajax({
-				url: "/deleteproject",
-				type: "POST",
-				dataType: "json",
-				data: {
-					id: projectid,
-					_token: $("input[name=_token]").val()
-				},
-				success:function(response){
-					if(response == "ok"){
-						$(pojectidpath).html("");
-					}
+		projectid = $(this).find("#projectid").val();
+		pojectidpath = "#" + projectid;
+		
+		$.ajax({
+			url: "/deleteproject",
+			type: "POST",
+			dataType: "json",
+			data: {
+				id: projectid,
+				_token: $("input[name=_token]").val()
+			},
+			success:function(response){
+				if(response == "ok"){
+					$(pojectidpath).html("");
 				}
-			})
+			}
 		})
+	})
+
+	/** filter */
+
+	if(window.location.pathname == "" || window.location.pathname == "/"){
+		$("#nav0").addClass("mb-2 bg-success text-white");
+	}
+	else if(window.location.pathname == "/1"){
+		$("#nav1").addClass("mb-2 bg-success text-white");
+	}
+	else if(window.location.pathname == "/2"){
+		$("#nav2").addClass("mb-2 bg-success text-white");
+	}
+	else if(window.location.pathname == "/3"){
+		$("#nav3").addClass("mb-2 bg-success text-white");
+	}
 	
 	
 });
