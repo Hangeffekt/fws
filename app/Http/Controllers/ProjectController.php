@@ -190,6 +190,18 @@ class ProjectController extends Controller
 
     public function deleteProject(Request $request) {
 
+        $project = DB::table('projects')->where("id", $request->id)->first();
+
+        foreach(json_decode($project->contacts) as $contact){
+            $data["option"] = "delete";
+            $data["old_title"] = $project->name;
+            $data["title"] = null;
+            $data["description"] = null;
+            $data["status"] = null;
+            $email = explode("/", $contact);
+            Mail::to($email[1])->send(new ChangeMail($data));
+        }
+
         $affected = DB::table('projects')
             ->where('id', $request->id)
             ->delete();

@@ -10,7 +10,7 @@
     @if($data["option"] == "new")
         <h3>Új projekthez adták hozzá</h3>
     @elseif($data["option"] == "delete")
-        <h3>Önt a {{ $data["title"] }} című projektből törölték!</h3>
+        <h3>Önt a {{ $data["old_title"] }} című projektből törölték!</h3>
     @else
         <h3>{{ $data["old_title"] }} változásai</h3>
     @endif
