@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\ItemController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,4 +17,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::get("/vues", [ItemController::class, "index"]);
+Route::prefix("/vue")->group (function () {
+    Route::post("/vue", [ItemController::class, "store"]);
+    Route::put("/{id}", [ItemController::class, "update"]);
+    Route::delete("/{id}", [ItemController::class, "destroy"]);
 });

@@ -15,6 +15,9 @@ use App\Http\Controllers\ProjectController;
 */
 
 Route::get("/{filter?}", [ProjectController::class, "projects"]);
+/*Route::get("/", function () {
+    return view('vue');
+});*/
 Route::post("createproject", [ProjectController::class, "createProject"])->name("createProject");
 
 Route::get("/project/{id}", [ProjectController::class, "project"]);

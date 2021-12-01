@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Mail\ChangeMail;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
-use App\Models\User;
+use App\Models\Project;
+use Illuminate\Support\Carbon;
 
 class ProjectController extends Controller
 {
@@ -36,13 +36,11 @@ class ProjectController extends Controller
             
 
         if(session("filter") != null){
-            $projects = DB::table('projects')
-            ->where("status", $filter)
+            $projects = Project::where("status", $filter)
             ->paginate(10);
         }
         else{
-            $projects = DB::table('projects')
-            ->paginate(10);
+            $projects = Project::paginate(10);
         }
 
         return view('main', ["Title"=>"Projektek", "Projects"=>$projects]);
@@ -73,19 +71,19 @@ class ProjectController extends Controller
             Mail::to($email[1])->send(new ChangeMail($data));
         }
 
-        $affected = DB::table('projects')->insert([
-            'name' => $request->title,
-            'description' => $request->description,
-            "status" => "Fejlesztésre vár",
-            "contacts" => $contacts
-        ]);
+        $newProject = new Project;
+        $newProject->name = $request->title;
+        $newProject->description = $request->description;
+        $newProject->status = "Fejlesztésre vár";
+        $newProject->contacts = $contacts;
+        $newProject->save();
 
         return back()->with("success", "Mentettük az új projektet!");
     }
 
     public function project(Request $request){
 
-        $project = DB::table('projects')->where("id", $request->id)->first();
+        $project = Project::where("id", $request->id)->first();
 
         $status = array("Fejlesztésre vár", "Folyamatban", "Kész");
 
@@ -110,7 +108,7 @@ class ProjectController extends Controller
 
         //get project data
 
-        $project = DB::table('projects')->where("id", $request->id)->first();
+        $project = Project::where("id", $request->id)->first();
 
         $data["option"] = "changes";
         $data["old_title"] = $project->name;
@@ -176,16 +174,18 @@ class ProjectController extends Controller
 
         }
 
-        $affected = DB::table('projects')
-            ->where('id', $request->id)
-            ->update([
-            'name' => $request->title,
-            'description' => $request->description,
-            "status" => $request->status,
-            "contacts" => $contacts
-        ]);
+        $existingProject = Project::find($request->id);
+        if($existingProject){
+            $existingProject->name = $request->title;
+            $existingProject->description = $request->description;
+            $existingProject->status = $request->status;
+            $existingProject->contacts = $contacts;
+            $existingProject->save();
 
-        return back()->with("success", "Mentettük a változásokat!");
+            return back()->with("success", "Mentettük a változásokat!");
+        }
+
+        return back()->with("success", "Nem található projekt!");
     }
 
     public function deleteProject(Request $request) {
@@ -202,8 +202,7 @@ class ProjectController extends Controller
             Mail::to($email[1])->send(new ChangeMail($data));
         }
 
-        $affected = DB::table('projects')
-            ->where('id', $request->id)
+        $affected = Project::where('id', $request->id)
             ->delete();
 
         return response()->json("ok");

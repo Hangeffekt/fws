@@ -19,8 +19,8 @@ class ProjectsTable extends Migration
             $table->string('description')->nullable();
             $table->string('status')->nullable();
             $table->json('contacts')->nullable();
-            $table->timestamp('update')->useCurrentOnUpdate()->nullable();
-            $table->timestamp('create')->useCurrent();
+            $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable();
+            $table->timestamp('created_at')->useCurrent();
         });
     }
 
