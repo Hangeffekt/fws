@@ -6,6 +6,7 @@ use App\Mail\ChangeMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Project;
+use App\Models\Status;
 use Illuminate\Support\Carbon;
 
 class ProjectController extends Controller
@@ -13,37 +14,19 @@ class ProjectController extends Controller
 
     public function projects(Request $request){
 
-        //filter
-
         if($request->filter == null){
-            $request->session()->put("filter", null);
-        }
-        else if($request->filter == 1){
-            $filter = "Fejlesztésre vár";
-            $request->session()->put("filter", $filter);
-        }
-        else if($request->filter == 2){
-            $filter = "Folyamatban";
-            $request->session()->put("filter", $filter);
-        }
-        else if($request->filter == 3){
-            $filter = "Kész";
-            $request->session()->put("filter", $filter);
-        }
-        else{
-            return back()->with("fail", "Ilyen projekt állapot nem létezik!");
-        }
-            
-
-        if(session("filter") != null){
-            $projects = Project::where("status", $filter)
-            ->paginate(10);
-        }
-        else{
             $projects = Project::paginate(10);
         }
+        else {
+            $request->session()->put("filter", $request->filter);
+            $projects = Status::find($request->filter)
+                ->getProjects()
+                ->paginate(10);
+        }
 
-        return view('main', ["Title"=>"Projektek", "Projects"=>$projects]);
+        $statuses = Status::get();
+
+        return view('main', ["Title"=>"Projektek", "Projects"=>$projects, "Statuses"=>$statuses]);
     }
 
     public function createProject(Request $request) {
@@ -64,17 +47,17 @@ class ProjectController extends Controller
         $data["option"] = "new";
         $data["title"] = $request->title;
         $data["description"] = $request->description;
-        $data["status"] = "Fejlesztésre vár";
+        $data["status"] = 0;
 
         foreach($request->contact as $contact){
             $email = explode("/", $contact);
-            Mail::to($email[1])->send(new ChangeMail($data));
+            //Mail::to($email[1])->send(new ChangeMail($data));
         }
 
         $newProject = new Project;
         $newProject->name = $request->title;
         $newProject->description = $request->description;
-        $newProject->status = "Fejlesztésre vár";
+        $newProject->status_id = 1;
         $newProject->contacts = $contacts;
         $newProject->save();
 

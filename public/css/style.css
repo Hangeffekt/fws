@@ -32,3 +32,7 @@ body {
 .project-list:hover {
   background-color: rgb(243, 243, 243);
 }
+
+.gray {
+  background-color: rgb(221, 221, 221);
+}

@@ -155,6 +155,9 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        "name" => "név",
+        "description" => "leírás"
+    ],
 
 ];

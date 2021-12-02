@@ -2,7 +2,10 @@
 
 @section("title", $Title)
 
+
 @section("content")
+@include("include.nav")
+
 <div class="col-12">
     <form action="{{ route('updateProject') }}" method="post" class="col-4 m-auto">
         @csrf

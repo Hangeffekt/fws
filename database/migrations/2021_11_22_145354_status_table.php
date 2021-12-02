@@ -13,7 +13,12 @@ class StatusTable extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('statuses', function (Blueprint $table) {
+            $table->integer("id")->autoIncrement();
+            $table->string('name')->nullable();
+            $table->timestamp('updated_at')->useCurrentOnUpdate()->nullable();
+            $table->timestamp('created_at')->useCurrent();
+        });
     }
 
     /**
@@ -23,6 +28,6 @@ class StatusTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('statuses');
     }
 }
